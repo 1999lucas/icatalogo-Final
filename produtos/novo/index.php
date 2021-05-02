@@ -1,3 +1,12 @@
+<?php
+
+require("../../database/conexao.php");
+
+$sql = " SELECT * FROM tbl_produto ";
+
+$resultado = mysqli_query($conexao, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -16,35 +25,36 @@
   <div class="content">
     <section class="produtos-container">
       <main>
-        <form class="form-produto">
+        <form class="form-produto" method="POST" action="administra.php">
+        <input type="hidden" name="acao" value="inserir" />
           <h1>Cadastro de produto</h1>
           <div class="input-group span2">
             <label for="descricao">Descrição</label>
-            <input type="text" id="descricao" required>
+            <input name="descricao" type="text" id="descricao" required>
           </div>
           <div class="input-group">
             <label for="peso">Peso</label>
-            <input type="text" id="peso" required>
+            <input name="peso" type="text" id="peso" required>
           </div>
           <div class="input-group">
             <label for="quantidade">Quantidade</label>
-            <input type="text" id="quantidade" required>
+            <input name="quantidade" type="text" id="quantidade" required>
           </div>
           <div class="input-group">
             <label for="cor">Cor</label>
-            <input type="text" id="cor" required>
+            <input name="cor" type="text" id="cor" required>
           </div>
           <div class="input-group">
             <label for="tamanho">Tamanho</label>
-            <input type="text" id="tamanho">
+            <input name="tamanho" type="text" id="tamanho">
           </div>
           <div class="input-group">
             <label for="valor">Valor</label>
-            <input type="text" id="valor" required>
+            <input name="valor" type="text" id="valor" required>
           </div>
           <div class="input-group">
             <label for="desconto">Desconto</label>
-            <input type="text" id="desconto">
+            <input name="desconto" type="text" id="desconto">
           </div>
           <button onclick="javascript:window.location.href = '../'">Cancelar</button>
           <button>Salvar</button>

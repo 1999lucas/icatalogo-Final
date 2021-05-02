@@ -1,3 +1,6 @@
+<?php
+require("../database/conexao.php");
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
