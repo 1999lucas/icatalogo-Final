@@ -11,7 +11,7 @@
     </nav>
     <div class="container-login" id="container-login">
         <h1>Fazer Login</h1>
-        <form method="POST" action="../componentes/header/acoesLogin.php">
+        <form method="POST" action="/web-backend/icatalogo-parte1/componentes/header/acoesLogin.php">
             <input type="text" name="usuario" placeholder="Usuário" />
             <input type="password" name="senha" placeholder="Senha" />
             <button type="submit" value="enviar" name="enviar">Entrar</button>

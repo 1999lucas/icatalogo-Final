@@ -1,15 +1,18 @@
 <?php 
 
 
-if(empty($POST["usuario"]) || empty($POST['senha'])) {
+if(empty($_POST["usuario"]) || empty($_POST['senha'])) {
     header('location: ../../produtos/index.php');
     exit();
 }
+//Acesso ao banco de dados e a conexão
+require("../../database/conexao.php");
 
-$usuario = mysqli_real_escape_string($conexao, $POST['$usuario']);
-$senha = mysqli_real_escape_string($conexao, $POST['senha']);
+//Receber os campos do formulario
+$usuario = mysqli_real_escape_string($conexao, $_POST['usuario']);
+$senha = mysqli_real_escape_string($conexao, $_POST['senha']);
 
-$query = "select id, usuario from tbl_administrador where usuario = '{$usuario}' and senha = '{$senha}'";
+$query = "select id, usuario from tbl_administrador where usuario = '$usuario' and senha = '$senha'";
 
 $result = mysqli_query($conexao, $query);
 
@@ -23,14 +26,16 @@ if($row == 1) {
     header('location: index.php');
     }exit();
 
+    
 
-//acesso ao banco de dados e a conexão
-// include "../icatalogo-parte1/database/conexao.php";
+
+
+
+    
 
 // switch($_POST["acao"]){
 //     case "login":
     
-//     //receber os campos do formulario
 //     $_POST["usuario"];
 //     $_POST["senha"];
 //     $_POST["autenticacao"];
