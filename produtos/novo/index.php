@@ -1,3 +1,7 @@
+<?php 
+session_start()
+?>
+
 <?php
 
 require("../../database/conexao.php");
@@ -19,15 +23,34 @@ $resultado = mysqli_query($conexao, $sql);
 </head>
 
 <body>
-  <header>
-    <input type="search" placeholder="Pesquisar" />
-  </header>
+<?php
+include ("../../componentes/header/header.php")
+?>
   <div class="content">
     <section class="produtos-container">
       <main>
         <form class="form-produto" method="POST" action="administra.php">
         <input type="hidden" name="acao" value="inserir" />
           <h1>Cadastro de produto</h1>
+          <ul>
+
+          <?php
+          
+          #verifica se existe erros na sessão do usuário
+          if(isset($_SESSION["erros"])) {
+            #se existir percorre os erros e exibe na tela
+            foreach($_SESSION["erros"] as $erro){
+              ?>
+
+              <li><?= $erro ?></li>
+          <?php 
+            }
+            #eliminar da sessão os erros já mostrados
+            unset($_SESSION["erros"]);
+          }
+          ?>
+
+          </ul>
           <div class="input-group span2">
             <label for="descricao">Descrição</label>
             <input name="descricao" type="text" id="descricao" required>
