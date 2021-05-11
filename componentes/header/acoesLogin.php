@@ -1,58 +1,60 @@
-<?php 
-
-
-if(empty($_POST["usuario"]) || empty($_POST['senha'])) {
-    header('location: ../../produtos/index.php');
-    exit();
-}
-//Acesso ao banco de dados e a conexão
+<?php
+session_start();
 require("../../database/conexao.php");
 
-//Receber os campos do formulario
-$usuario = mysqli_real_escape_string($conexao, $_POST['usuario']);
-$senha = mysqli_real_escape_string($conexao, $_POST['senha']);
+function validarCampos()
+{
+    $erros = [];
 
-$query = "select id, usuario from tbl_administrador where usuario = '$usuario' and senha = '$senha'";
+    if (!isset($_POST["usuário"]) && $_POST["usuario"] == "") {
+        $erros = "O campo usuário é obrigatório";
+    }
+    if (!isset($_POST["senha"]) && $_POST["senha"] == "") {
+        $erros = "O campo senha é obrigatório";
+    }
+    return $erros;
+}
 
-$result = mysqli_query($conexao, $query);
+//autenticação
+switch ($_POST["acao"]) {
+    case "login":
 
-$row = mysqli_num_rows($result);
+        $erros = validarCampos();
+        if (count($erros) > 0) {
+            $_SESSION["mensagens"] = $erros;
 
-if($row == 1) {
-    $_SESSION['usuario'] = $usuario;
-    header('location: painel.php');
-    exit();
-}else{
-    header('location: index.php');
-    }exit();
+            header("location: ../../produtos/index.php");
+        }
 
-    
+        //receber os campos do fomulário
+        $usuario = $_POST["usuario"];
+        $senha = $_POST["senha"];
+        //montar o sql select na tabela tbl_adminitrador
+        //SELECT * FROM tbl_administrador WHERE usuario = $usuario;
+        $sql = " SELECT * FROM tbl_administrador WHERE usuario = '$usuario' ";
+        //executar o sql
+        $resultado = mysqli_query($conexao, $sql);
+        $usuario = mysqli_fetch_array($resultado);
+        var_dump($usuario);
+        //verificar se o usuário existe e se a senha está correta
+        if (!$usuario || password_verify($senha, $usuario["senha"])) {
+            $erros[] = "Usuário e/ou senha inválidos";
+            $_SESSION["erros"] = $erros;
+        } else {
+            //se estiver correta, salvar o id e o nome do usuário na sessão
+            $_SESSION["usuarioId"] = $usuario["id"];
+            $_SESSION["usuarioNome"] = $usuario["nome"];
+            $_SESSION["mensagem"] = "Bem vindo, " . $usuario["nome"];
+        }
+        //redirecionar para tela de listagem de produtos
+        header("location: ../../produtos/index.php");
+        break;
+    case "logout":
+        //implementar o logout
+        session_destroy();
+
+        header("location:../../produtos/index.php");
 
 
-
-
-    
-
-// switch($_POST["acao"]){
-//     case "login":
-    
-//     $_POST["usuario"];
-//     $_POST["senha"];
-//     $_POST["autenticacao"];
-
-//     //mostrar o sql select na tabela tbl_administrador
-//     //SELECT * FROM tbl_administrador WHERE usuario = $usuario;
-//     $query = "SELECT * FROM tbl_administrador WHERE usuario = $usuario";
-    
-//     }
-    
-    //verificar se o ousuario existe e se a senha esta correta
-
-    //se estiver correta, salvar o id e o nome do usuário da sessão
-
-    //redirecionar para tela de listagem
-    
-    //implementar o login
-
-    //  case "logout":
-    //implementar o logout }}}
+        break;
+}

@@ -1,9 +1,3 @@
-<?php 
-session_start()
-?>
-
-<?php
-
 require("../../database/conexao.php");
 
 $sql = " SELECT * FROM tbl_produto ";
@@ -27,7 +21,26 @@ $resultado = mysqli_query($conexao, $sql);
 include ("../../componentes/header/header.php")
 ?>
   <div class="content">
+
+
+  <div style="position: absolute; top: 0; right: 0;">
+  <?php
+  if (isset($_SESSION["erros"])) {
+    echo $_SESSION["erros"][0];
+  }
+
+  if(isset($_SESSION["mensagem"])){
+    echo
+  }
+
+  
     <section class="produtos-container">
+      <?php
+
+      //autorização
+
+      //se o usuário estiver logado, mostre os botões
+      if (isset($_SESSION["usuarioid"])) {
       <main>
         <form class="form-produto" method="POST" action="administra.php">
         <input type="hidden" name="acao" value="inserir" />

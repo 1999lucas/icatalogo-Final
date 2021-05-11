@@ -59,10 +59,11 @@
   border-top: 15px solid transparent;
 }
 .container-login > form {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 10px;
 }
+
 .container-login input {
   width: 100%;
 }
@@ -79,4 +80,9 @@
   color: white;
   border-radius: 10px;
   text-align: center;
+}
+
+
+.container-login > h1 {
+  display: none;
 }
