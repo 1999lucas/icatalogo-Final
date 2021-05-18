@@ -1,8 +1,20 @@
+<?php 
+
 require("../../database/conexao.php");
 
 $sql = " SELECT * FROM tbl_produto ";
 
 $resultado = mysqli_query($conexao, $sql);
+
+//se o usuario não estiver logado
+if(!isset($_SESSION["usuarioId"])) {
+
+//redireciona para a página de produtos com mensagem de erro
+$_SESSION["mensagem"] = "Você precisa fazer login para acessar esta página.";
+
+header("location: ../index.php");
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -18,12 +30,11 @@ $resultado = mysqli_query($conexao, $sql);
 
 <body>
 <?php
-include ("../../componentes/header/header.php")
+include ("../../componentes/header/header.php");
 ?>
-  <div class="content">
+  <div class="content"></div>
 
-
-  <div style="position: absolute; top: 0; right: 0;">
+  <div style="position: absolute; top: 0; right: 0;"></div>
   <?php
   if (isset($_SESSION["erros"])) {
     echo $_SESSION["erros"][0];
@@ -31,7 +42,6 @@ include ("../../componentes/header/header.php")
 
   if(isset($_SESSION["mensagem"])){
     echo
-  }
 
   
     <section class="produtos-container">
