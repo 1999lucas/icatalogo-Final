@@ -1,22 +1,22 @@
-<?php 
-
+<?php
 require("../../database/conexao.php");
 
-$sql = " SELECT * FROM tbl_produto ";
+$sql = " SELECT * FROM tbl_categoria ";
 
 $resultado = mysqli_query($conexao, $sql);
 
-//se o usuario não estiver logado
-if(!isset($_SESSION["usuarioId"])) {
 
-//redireciona para a página de produtos com mensagem de erro
-$_SESSION["mensagem"] = "Você precisa fazer login para acessar esta página.";
 
-header("location: ../index.php");
 
-}
+
+
+
 
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -29,49 +29,44 @@ header("location: ../index.php");
 </head>
 
 <body>
-<?php
-include ("../../componentes/header/header.php");
-?>
-  <div class="content"></div>
-
-  <div style="position: absolute; top: 0; right: 0;"></div>
   <?php
-  if (isset($_SESSION["erros"])) {
-    echo $_SESSION["erros"][0];
+  include("../../componentes/header/header.php");
+
+
+  if (!isset($_SESSION["usuarioId"])) {
+    //REDIRECIONA PARA A PAGINA DE PRODUTOS COM MENSAGEM DE ERRO
+
+    $_SESSION["mensagem"] = "Você precisa fazer login para acessar essa página.";
+
+    header("location: ../index.php");
   }
 
-  if(isset($_SESSION["mensagem"])){
-    echo
 
-  
+
+  ?>
+  <div class="content">
     <section class="produtos-container">
-      <?php
-
-      //autorização
-
-      //se o usuário estiver logado, mostre os botões
-      if (isset($_SESSION["usuarioid"])) {
       <main>
-        <form class="form-produto" method="POST" action="administra.php">
-        <input type="hidden" name="acao" value="inserir" />
+        <form class="form-produto" method="POST" action="administra.php" enctype="multipart/form-data">
+          <input type="hidden" name="acao" value="inserir" />
           <h1>Cadastro de produto</h1>
           <ul>
 
-          <?php
-          
-          #verifica se existe erros na sessão do usuário
-          if(isset($_SESSION["erros"])) {
-            #se existir percorre os erros e exibe na tela
-            foreach($_SESSION["erros"] as $erro){
-              ?>
+            <?php
 
-              <li><?= $erro ?></li>
-          <?php 
+            #verifica se existe erros na sessão do usuário
+            if (isset($_SESSION["erros"])) {
+              #se existir percorre os erros e exibe na tela
+              foreach ($_SESSION["erros"] as $erro) {
+            ?>
+
+                <li><?= $erro ?></li>
+            <?php
+              }
+              #eliminar da sessão os erros já mostrados
+              unset($_SESSION["erros"]);
             }
-            #eliminar da sessão os erros já mostrados
-            unset($_SESSION["erros"]);
-          }
-          ?>
+            ?>
 
           </ul>
           <div class="input-group span2">
@@ -102,6 +97,33 @@ include ("../../componentes/header/header.php");
             <label for="desconto">Desconto</label>
             <input name="desconto" type="text" id="desconto">
           </div>
+
+          <div class="input-group">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" name="categoria" required>
+              <option value="">SELECIONE</option>
+
+
+              <?php
+              while ($categoria = mysqli_fetch_array($resultado)) {
+              ?>
+
+                <option value="<?= $categoria["id"] ?>"><?= $categoria["descricao"] ?> </option>
+
+              <?php
+              }
+              ?>
+
+            </select>
+          </div>
+
+          <div class="input-group">
+              <label for="categoria">Foto</label>
+              
+              <input type="file" name="foto" id="foto" accept="image/*"/>"
+            </div>
+
+
           <button onclick="javascript:window.location.href = '../'">Cancelar</button>
           <button>Salvar</button>
         </form>

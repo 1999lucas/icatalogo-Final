@@ -3,10 +3,35 @@ session_start();
 
 ?>
 <link href="/web-backend/icatalogo-parte1/componentes/header/header.css" rel="stylesheet" />
+
+<?php
+
+
+if (isset($_SESSION["mensagem"])) {
+?>
+
+<div class="mensagens">
+    <?=$_SESSION["mensagem"]; ?>
+</div>
+
+<script lang="javascript">
+    setTimeout(() => {
+    document.querySelector(".mensagens").style.display = "none";
+    }, 4000);
+</script>
+
+<?php
+    unset($_SESSION["mensagem"]);
+}
+?>
+</div>
+
 <header class="header">
     <figure>
-        <img src="/web-backend/icatalogo-parte1/imgs/logo.png" />
-    </figure>
+        <a href="/web-backend/icatalogo-parte1/produtos">
+            <img src="/web-backend/icatalogo-parte1/imgs/logo.png" />
+        </a>
+        </figure>
     <input type="search" placeholder="Pesquisar" />
     <?php
     if (!isset($_SESSION["usuarioId"])) {

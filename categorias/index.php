@@ -7,6 +7,7 @@ $resultado = mysqli_query($conexao, $sqlSelect);
 ?>
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,21 +30,42 @@ $resultado = mysqli_query($conexao, $sqlSelect);
                 <input type="hidden" name="acao" value="inserir">
                 <form method="POST" class="form-categoria" action="../categorias/acoes.php">
                     <h1 class="span2">Adicionar Categorias</h1>
+                    <ul>
+                        <?php
+                        //verifica se existe erros na sessão do usuário
+                        if (isset($_SESSION["erros"])) {
+                            //se existir percorre os erros exbindo na tela
+                            foreach ($_SESSION["erros"] as $erro) {
+                        ?>
+                                <li><?= $erro ?></li>
+                        <?php
+                            }
+                            //eliminar da sessão os erros já mostrados
+                            unset($_SESSION["erros"]);
+                        }
+                        ?>
+                    </ul>
                     <div class="input-group span2">
                         <input type="hidden" name="acao" value="inserir" />
                         <label for="descricao">Descrição</label>
                         <input type="text" name="descricao" id="descricao" />
                     </div>
-                    <button type="button">Cancelar</button>
+                    <button type="button" onclick="javascript:window.location.href = '../produtos'">Cancelar</button>
                     <button>Salvar</button>
                 </form>
                 <h1>Lista de Categorias</h1>
                 <?php
+
+
+                if (mysqli_num_rows($resultado) == 0) {
+                    echo "<p style='text-align: center'>Nenhuma categoria cadastrada.</p>";
+}
+
                 while ($descricao = mysqli_fetch_array($resultado)) {
                 ?>
                     <div class="card-categorias">
                         <?= $descricao["descricao"] ?>
-                        <form method="POST" action="acoes.php" value="deletar">
+                        <form method="POST" action="acoes.php">
                             <input type="hidden" name="acao" value="deletar">
                             <input type="hidden" name="categoriaId" value="<?= $descricao['id'] ?>" />
                             <button>
@@ -57,6 +79,16 @@ $resultado = mysqli_query($conexao, $sqlSelect);
             </main>
         </section>
     </div>
+
+    <!--
+                <script lang="javascript">
+                    function deletar(categoriaId){
+                        document.querySelector("#categoriaId").value = categoriaId;
+                        document.querySelector("#form-deletar").submit();
+                    }
+                -->
+
+
 </body>
 
 </html>
