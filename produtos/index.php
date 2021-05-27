@@ -5,6 +5,54 @@ $sql = " SELECT p.*, c.descricao as categoria FROM tbl_produto p INNER JOIN tbl_
 
 $resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));;
 
+
+
+
+// $sql = "SELECT p.*, c.descricao as categoria FROM tbl_produto p
+// INNER JOIN tbl_categoria c ON p.categoria_id = c.id
+// WHERE p.descricao LIKE '%?%'
+// OR c.descricao LIKE '%?%'
+// ORDER BY p.id DESC";
+
+$pesquisar = $_GET["pesquisar"];
+
+
+$pesquisa = isset($_GET["pesquisar"]) ? $_GET["pesquisar"] : null;
+if($pesquisa) {
+
+    $sql = "SELECT p.*, c.descricao as categoria FROM tbl_produto p
+    INNER JOIN tbl_categoria c ON p.categoria_id = c.id
+    WHERE p.descricao LIKE '%$pesquisar'%'
+    OR c.descricao LIKE '$pesquisar'%'
+    ORDER BY p.id DESC";
+
+}else{
+
+    $sql = " SELECT p.*, c.descricao as categoria FROM tbl_produto p INNER JOIN tbl_categoria c ON p.categoria_id = c.id ORDER BY p.id DESC ";
+
+}
+$pesquisar = $_GET["pesquisar"];
+$result_pesquisa = "SELECT p.*, c.descricao as categoria FROM tbl_produto p
+INNER JOIN tbl_categoria c ON p.categoria_id = c.id
+WHERE p.descricao LIKE '%$pesquisar'%'
+OR c.descricao LIKE '$pesquisar'%'
+ORDER BY p.id DESC";
+$resultado_pesquisa = mysqli_query($conexao, $result_pesquisa);
+
+
+
+if(isset($_GET['pesquisar'])){
+
+    echo $_GET['pesquisar'];
+
+}
+    //você não pode fazer esse redirecionamento, se não fica num loop infinito, sempre redirecionando para mesma página.
+    // header("location: index.php");
+    // exit();
+
+
+
+
 // percorrer os resultados, mostrando um card para cada produto
 
 // mostrar a imagem do produto (que veio do banco)
@@ -78,43 +126,47 @@ $resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));;
             ?>
             <main>
                 <?php
-                while($produto = mysqli_fetch_array(($resultado))) {
-                
+                while ($produto = mysqli_fetch_array(($resultado))) { {
 
-                 {
-                    $valorDesconto = $produto["desconto"] / 100;
-                    $descontoFinal = $produto["valor"] * $valorDesconto;
 
-                    $produto["valor"] = $produto["valor"] - $descontoFinal;
 
-                    $qtdeParcelas = $produto["valor"] > 1000 ? 12 : 6;
-                    $valorParcela = $produto["valor"] / $qtdeParcelas;
-                    
+                        $valorDesconto = $produto["desconto"] / 100;
+                        $descontoFinal = $produto["valor"] * $valorDesconto;
+                        $valorDesconto = $valorDesconto * 100;
+
+                        $produto["valor"] = $produto["valor"] - $descontoFinal;
+
+                        $qtdeParcelas = $produto["valor"] > 1000 ? 12 : 6;
+                        $valorParcela = $produto["valor"] / $qtdeParcelas;
                     }
                 ?>
-                <article class="card-produto">
-                    <figure>
-                        <img src=" fotos/<?= $produto["imagem"] ?>" />
-                    </figure>
-                    <section>
-                        <span class="preco">R$ <?= number_format($produto["valor"],2,",",".") ?></span>
-                        <span class="parcelamento">ou em 
-                        
-                        <em><?= $qtdeParcelas ?>x R$<?= number_format($valorParcela, 2, ",",".") ?> sem juros</em>
-                        
-                        </span>
-                        <span class="descricao"><?= $produto["descricao"] ?></span>
-                        <span class="categoria">
-                            <em><?= $produto["categoria"] ?> </em> 
-                        </span>
-                    </section>
-                    <footer>
+                    <article class="card-produto">
+                        <figure>
+                            <img src=" fotos/<?= $produto["imagem"] ?>" />
+                        </figure>
+                        <section>
+                            <span class="preco">R$ <?= number_format($produto["valor"], 2, ",", ".") ?>
 
-                    </footer>
-                </article>
-                    <?php
+                                <em><?= $valorDesconto ?> % off</em>
+
+                            </span>
+                            <span class="parcelamento">ou em
+
+                                <em><?= $qtdeParcelas ?>x R$<?= number_format($valorParcela, 2, ",", ".") ?> sem juros</em>
+
+                            </span>
+                            <span class="descricao"><?= $produto["descricao"] ?></span>
+                            <span class="categoria">
+                                <em><?= $produto["categoria"] ?> </em>
+                            </span>
+                        </section>
+                        <footer>
+
+                        </footer>
+                    </article>
+                <?php
                 }
-                    ?>
+                ?>
 
 
             </main>

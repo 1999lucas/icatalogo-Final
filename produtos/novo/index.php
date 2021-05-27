@@ -12,6 +12,7 @@ $resultado = mysqli_query($conexao, $sql);
 
 
 
+
 ?>
 
 

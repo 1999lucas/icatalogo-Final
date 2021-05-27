@@ -10,15 +10,15 @@ session_start();
 if (isset($_SESSION["mensagem"])) {
 ?>
 
-<div class="mensagens">
-    <?=$_SESSION["mensagem"]; ?>
-</div>
+    <div class="mensagens">
+        <?= $_SESSION["mensagem"]; ?>
+    </div>
 
-<script lang="javascript">
-    setTimeout(() => {
-    document.querySelector(".mensagens").style.display = "none";
-    }, 4000);
-</script>
+    <script lang="javascript">
+        setTimeout(() => {
+            document.querySelector(".mensagens").style.display = "none";
+        }, 4000);
+    </script>
 
 <?php
     unset($_SESSION["mensagem"]);
@@ -31,8 +31,17 @@ if (isset($_SESSION["mensagem"])) {
         <a href="/web-backend/icatalogo-parte1/produtos">
             <img src="/web-backend/icatalogo-parte1/imgs/logo.png" />
         </a>
-        </figure>
-    <input type="search" placeholder="Pesquisar" />
+    </figure>
+    
+    
+    <form method="GET" action="/web-backend/icatalogo-parte1/produtos/index.php">
+        <input type="text" placeholder="Pesquisar" name="pesquisar" />
+        
+        <button><img src="http://localhost/web-backend/icatalogo-parte1/imgs/lupa-de-pesquisa.svg"></button>
+    
+    </form>
+
+
     <?php
     if (!isset($_SESSION["usuarioId"])) {
     ?>
@@ -67,9 +76,11 @@ if (isset($_SESSION["mensagem"])) {
 </header>
 <script lang="javascript">
     document.querySelector("#menu-admin").addEventListener("click", toggleLogin);
-    function logout(){
+
+    function logout() {
         document.querySelector("#form-logout").submit();
     }
+
     function toggleLogin() {
         let containerLogin = document.querySelector("#container-login");
         let h1Form = document.querySelector("#container-login > h1");
